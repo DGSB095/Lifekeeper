@@ -1,9 +1,15 @@
+from task import *
+
 def add_new_task(sections):
     content = input("Введите описание задачи")
     print("Выберите раздел:")
     for index, section in enumerate(sections, 1):
         print(f"{index}. {section}")
     section = int(input("Введите номер раздела (или пустым, если нет): "))
+    due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
+    should_repeat = input("Повторять задачу? (нет/каждые 3 дня): ")
+    b = Task(False, content,section,due_date,should_repeat)
+    print("Задача успешно добавлена!")
 
 sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
 while True:
@@ -16,12 +22,15 @@ while True:
 3. Редактировать задачу
 4. Удалить задачу
 5. Управление разделами
-6. Выход
+7. Выполнить задачу
+7. Выход
 Выберите опцию (1-6):""")
     option = int(input())
     match option:
-        case 6:
+        case 7:
             break
+        case 6:
+            print("Выполнить задачу")
         case 5:
             print("Управление разделами")
         case 4:
