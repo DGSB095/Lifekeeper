@@ -1,5 +1,8 @@
 from task import *
 
+sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
+tmanager = TaskManager([], sections, 0, [])
+
 def add_new_task(sections):
     content = input("Введите описание задачи")
     print("Выберите раздел:")
@@ -8,10 +11,15 @@ def add_new_task(sections):
     section = int(input("Введите номер раздела (или пустым, если нет): "))
     due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
     should_repeat = input("Повторять задачу? (нет/каждые 3 дня): ")
-    b = Task(False, content,section,due_date,should_repeat)
-    print("Задача успешно добавлена!")
+    tmanager.add_task(False, content, section, due_date, should_repeat)
 
-sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
+def show_tasks():
+    tasks = tmanager.get_tasks()
+    for index, task in enumerate(tasks, 1):
+        print(f"{index}. {task.content} {f'({tmanager.sections[task.section - 1]}) ' if task.section != 0 else ''}")
+
+
+
 while True:
 
     print("""=========================
@@ -38,6 +46,6 @@ while True:
         case 3:
             print("Редактировать задачу")
         case 2:
-            print("Посмотреть задачи")
+            show_tasks()
         case 1:
             add_new_task(sections)

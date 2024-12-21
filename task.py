@@ -20,18 +20,22 @@ class TaskManager:
         self.removed_ids = removed_ids
 
     def add_task(self,completed,content,section,due_date,should_repeat):
-        self.tasks.append(Task(completed,content,section,due_date,should_repeat))
+        self.tasks.append(Task(self.next_id,False,content,section,due_date,should_repeat))
+        if len(self.removed_ids) > 0:
+            self.next_id = min(self.removed_ids)
 
     def remove_task(self, id):
         self.removed_ids.append(id)
         for task in self.tasks:
             if task.id == id:
                 self.tasks.remove(task)
+        self.next_id = min(self.removed_ids)
 
     def get_task(self, id):
         for task in self.tasks:
             if task.id == id:
                 return task
+
     def get_tasks_by_section(self, section):
         return [task for task in self.tasks if task.section == section]
 
@@ -46,4 +50,8 @@ class TaskManager:
                 task.due_date = due_date
                 task.should_repeat = should_repeat
 
+    def add_section(self, section):
+        self.sections.append(section)
 
+    def remove_section(self, section):
+        self.sections.remove(section)
