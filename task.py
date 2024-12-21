@@ -1,6 +1,3 @@
-from optparse import Option
-
-
 class Task:
     def __init__(self,id=0, completed=False,content="",section=0,due_date="",should_repeat=""):
         self.id = id
