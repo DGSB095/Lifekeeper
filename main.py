@@ -11,14 +11,46 @@ def add_new_task(sections):
     section = int(input("Введите номер раздела (или пустым, если нет): "))
     due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
     should_repeat = input("Повторять задачу? (нет/каждые 3 дня): ")
-    tmanager.add_task(False, content, section, due_date, should_repeat)
+    delete_on_complete = input("Удалить задачу после завершения? (Y/N): ")
+    if delete_on_complete == "Y":
+        tmanager.add_task(False, content, section, due_date, should_repeat,True)
+    else:
+        tmanager.add_task(False, content, section, due_date, should_repeat,False)
+
 
 def show_tasks():
     tasks = tmanager.get_tasks()
     for index, task in enumerate(tasks, 1):
-        print(f"{index}. {task.content} {f'({tmanager.sections[task.section - 1]}) ' if task.section != 0 else ''}")
+        print(f"{index}. {task.content} {f'({tmanager.sections[task.section - 1]}) ' if task.section != 0 else ''}{f'- до {task.due_date}' if task.due_date != '' else ''} {f'- повторять каждые {task.should_repeat} дней' if task.should_repeat != '' else ''} {f'- выполнено' if task.completed else ''}")
 
+def delete_task():
+    show_tasks()
+    id = int(input("Введите номер задачи для удаления: "))
+    tmanager.remove_task(id)
 
+def complete_task():
+    show_tasks()
+    id = int(input("Введите номер задачи для завершения: "))
+    task = tmanager.get_task(id)
+    task.complete()
+    if task.delete_on_complete:
+        tmanager.remove_task(id)
+
+def edit_task():
+    show_tasks()
+    id = int(input("Введите номер задачи для редактирования: "))
+    content = input("Введите описание задачи")
+    print("Выберите раздел:")
+    for index, section in enumerate(sections, 1):
+        print(f"{index}. {section}")
+    section = int(input("Введите номер раздела (или пустым, если нет): "))
+    due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
+    should_repeat = input("Повторять задачу? (нет/каждые 3 дня): ")
+    delete_on_complete = input("Удалить задачу после завершения? (Y/N): ")
+    if delete_on_complete == "Y":
+        tmanager.add_task(False, content, section, due_date, should_repeat, True)
+    else:
+        tmanager.add_task(False, content, section, due_date, should_repeat, False)
 
 while True:
 
@@ -30,21 +62,21 @@ while True:
 3. Редактировать задачу
 4. Удалить задачу
 5. Управление разделами
-7. Выполнить задачу
+6. Выполнить задачу
 7. Выход
-Выберите опцию (1-6):""")
+Выберите опцию (1-7):""")
     option = int(input())
     match option:
         case 7:
             break
         case 6:
-            print("Выполнить задачу")
+            complete_task()
         case 5:
-            print("Управление разделами")
+            print("WORK IN PROGRESS ")
         case 4:
-            print("Удалить задачу")
+            delete_task()
         case 3:
-            print("Редактировать задачу")
+            edit_task()
         case 2:
             show_tasks()
         case 1:
