@@ -1,6 +1,6 @@
 from task import *
 
-sections = ["suck dick", "Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
+sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
 tmanager = TaskManager([], sections, 0, [])
 
 def add_new_task(sections):
