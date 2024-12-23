@@ -1,7 +1,7 @@
 from task import *
 
 sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
-tmanager = TaskManager([], sections, 0, [])
+tmanager = TaskManager([], sections, 0)
 
 def add_new_task(sections):
     content = input("Введите описание задачи: ")
@@ -69,6 +69,39 @@ def edit_task():
     else:
         tmanager.edit_task(id, content, section, due_date, should_repeat, False)
 
+def sections_control():
+    while True:
+        print("""=========================
+      TASK-TRACKER
+   Управление разделами
+=========================
+1. Добавить раздел
+2. Просмотреть разделы
+3. Удалить раздел
+4. Редактировать раздел
+5. В меню
+Выберите опцию (1-5):""")
+        option = int(input())
+        match option:
+            case 1:
+                section_name = input("Введите имя раздела: ")
+                tmanager.add_section(section_name)
+            case 2:
+                for index, section in enumerate(sections, 1):
+                    print(f"{index}. {section}")
+            case 3:
+                for index, section in enumerate(sections, 1):
+                    print(f"{index}. {section}")
+                section_id = int(input("Введите номер раздела для удаления: "))
+                if section_id > len(sections) or section_id < 1:
+                    print("Введите корректный номер раздела.")
+                else:
+                    tmanager.remove_section(section_id - 1)
+            case 4:
+                print("WORK IN PROGRESS")
+            case 5:
+                break
+
 while True:
 
     print("""=========================
@@ -81,7 +114,7 @@ while True:
 5. Управление разделами
 6. Выполнить задачу
 7. Выход
-Выберите опцию (1-7):""")
+Выберите опцию (1-7): """)
     option = int(input())
     match option:
         case 7:
@@ -89,7 +122,7 @@ while True:
         case 6:
             complete_task()
         case 5:
-            print("WORK IN PROGRESS ")
+            sections_control()
         case 4:
             delete_task()
         case 3:
