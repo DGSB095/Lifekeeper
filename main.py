@@ -4,15 +4,15 @@ sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
 tmanager = TaskManager([], sections, 0, [])
 
 def add_new_task(sections):
-    content = input("Введите описание задачи")
-    print("Выберите раздел:")
+    content = input("Введите описание задачи: ")
+    print("Выберите раздел: ")
     for index, section in enumerate(sections, 1):
         print(f"{index}. {section}")
     section = int(input("Введите номер раздела (или пустым, если нет): "))
     due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
     should_repeat = input("Повторять задачу? (нет/каждые 3 дня): ")
     delete_on_complete = input("Удалить задачу после завершения? (Y/N): ")
-    if delete_on_complete == "Y":
+    if delete_on_complete.lower() == "y":
         tmanager.add_task(False, content, section, due_date, should_repeat,True)
     else:
         tmanager.add_task(False, content, section, due_date, should_repeat,False)
@@ -25,32 +25,49 @@ def show_tasks():
 
 def delete_task():
     show_tasks()
+    tasks = tmanager.get_tasks()
     id = int(input("Введите номер задачи для удаления: "))
+    for index, task in enumerate(tasks, 1):
+        if index == id:
+            id = task.id
     tmanager.remove_task(id)
 
 def complete_task():
     show_tasks()
     id = int(input("Введите номер задачи для завершения: "))
+    tasks = tmanager.get_tasks()
+    for index, task in enumerate(tasks, 1):
+        if index == id:
+            id = task.id
     task = tmanager.get_task(id)
     task.complete()
     if task.delete_on_complete:
         tmanager.remove_task(id)
 
 def edit_task():
+    tasks = tmanager.get_tasks()
     show_tasks()
     id = int(input("Введите номер задачи для редактирования: "))
-    content = input("Введите описание задачи")
-    print("Выберите раздел:")
-    for index, section in enumerate(sections, 1):
-        print(f"{index}. {section}")
-    section = int(input("Введите номер раздела (или пустым, если нет): "))
+    for index, task in enumerate(tasks, 1):
+        if index == id:
+            id = task.id
+    content = input("Введите описание задачи: ")
+    print("Выберите раздел: ")
+    while True:
+        for index, section in enumerate(sections, 1):
+            print(f"{index}. {section}")
+        section = int(input("Введите номер раздела (или пустым, если нет): "))
+        if len(sections) < section:
+            print("Введите корректный номер раздела.")
+        else:
+            break
     due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
     should_repeat = input("Повторять задачу? (нет/каждые 3 дня): ")
     delete_on_complete = input("Удалить задачу после завершения? (Y/N): ")
-    if delete_on_complete == "Y":
-        tmanager.add_task(False, content, section, due_date, should_repeat, True)
+    if delete_on_complete.lower() == "y":
+        tmanager.edit_task(id, content, section, due_date, should_repeat, True)
     else:
-        tmanager.add_task(False, content, section, due_date, should_repeat, False)
+        tmanager.edit_task(id, content, section, due_date, should_repeat, False)
 
 while True:
 

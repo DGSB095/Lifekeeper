@@ -41,13 +41,14 @@ class TaskManager:
     def get_tasks(self):
         return self.tasks
 
-    def edit_task(self, id, content, section, due_date, should_repeat):
+    def edit_task(self, id, content, section, due_date, should_repeat, delete_on_complete):
         for task in self.tasks:
             if task.id == id:
                 task.content = content
                 task.section = section
                 task.due_date = due_date
                 task.should_repeat = should_repeat
+                task.delete_on_complete = delete_on_complete
 
     def add_section(self, section):
         self.sections.append(section)
