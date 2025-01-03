@@ -46,7 +46,13 @@ class TaskManager:
                 task.delete_on_complete = delete_on_complete
 
     def add_section(self, section):
-        self.sections.append(section)
+        if section not in self.sections:
+            self.sections.append(section)
+        else:
+            return False
 
     def remove_section(self, section_id):
         self.sections.pop(section_id)
+
+    def edit_section(self, section_id, new_section):
+        self.sections[section_id] = new_section
