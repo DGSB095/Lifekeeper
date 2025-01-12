@@ -1,3 +1,6 @@
+import json
+import pathlib
+
 class Task:
     def __init__(self,id=0, completed=False,content="",section=0,due_date="",should_repeat="", delete_on_complete=True):
         self.id = id
@@ -56,3 +59,25 @@ class TaskManager:
 
     def edit_section(self, section_id, new_section):
         self.sections[section_id] = new_section
+
+    def read_data_from_tmanager_file(self, path_to_tmanager):
+        with open(path_to_tmanager + "/.lifekeeper/tmanager.json", "r") as f:
+            data = json.load(f)
+            self.tasks = data["tasks"]
+            self.sections = data["sections"]
+            self.next_id = data["next_id"]
+
+    def create_tmanager_file(self, path, tmanager_name):
+        try:
+            pathlib.Path(path + "/" + tmanager_name).mkdir(parents=True, exist_ok=False)
+            pathlib.Path(path + "/" + tmanager_name + "/.lifekeeper").mkdir(parents=True, exist_ok=False)
+            with open(path + "/" + tmanager_name + "/.lifekeeper/tmanager.json", "w") as f:
+                json.dump({"tasks": [], "sections": [], "next_id": 0}, f)
+            self.read_data_from_tmanager_file(path + "/" + tmanager_name)
+        except FileExistsError:
+            return False
+
+    def write_data_to_tmanager_file(self, path_to_tmanager):
+        tasks_dict = [task.__dict__ for task in self.tasks]
+        with open(path_to_tmanager + "/.lifekeeper/tmanager.json", "w") as f:
+            json.dump({"tasks": tasks_dict, "sections": self.sections, "next_id": self.next_id}, f)

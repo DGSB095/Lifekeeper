@@ -1,12 +1,13 @@
 from task import *
 
 sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
+tmanager_path = ""
 tmanager = TaskManager([], sections, 0)
 
 def add_new_task(sections):
     content = input("Введите описание задачи: ")
     print("Выберите раздел: ")
-    for index, section in enumerate(sections, 1):
+    for index, section in enumerate(tmanager.sections, 1):
         print(f"{index}. {section}")
     section = int(input("Введите номер раздела (или пустым, если нет): "))
     due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
@@ -16,6 +17,7 @@ def add_new_task(sections):
         tmanager.add_task(False, content, section, due_date, should_repeat,True)
     else:
         tmanager.add_task(False, content, section, due_date, should_repeat,False)
+    tmanager.write_data_to_tmanager_file(tmanager_path)
 
 
 def show_tasks():
@@ -69,10 +71,10 @@ def edit_task():
     else:
         tmanager.edit_task(id, content, section, due_date, should_repeat, False)
 
-def sections_control():
+def sections_control_menu():
     while True:
         print("""=========================
-      TASK-TRACKER
+           LIFEKEEPER
    Управление разделами
 =========================
 1. Добавить раздел
@@ -87,7 +89,7 @@ def sections_control():
                 section_name = input("Введите имя раздела: ")
                 tmanager.add_section(section_name)
             case 2:
-                for index, section in enumerate(sections, 1):
+                for index, section in enumerate(tmanager.sections, 1):
                     print(f"{index}. {section}")
             case 3:
                 for index, section in enumerate(sections, 1):
@@ -101,11 +103,13 @@ def sections_control():
                 print("WORK IN PROGRESS")
             case 5:
                 break
+        tmanager.write_data_to_tmanager_file(tmanager_path)
 
-while True:
+def main_menu():
+    while True:
 
-    print("""=========================
-      TASK-TRACKER
+        print("""=========================
+          LIFEKEEPER
 =========================
 1. Добавить задачу
 2. Просмотреть задачи
@@ -115,19 +119,43 @@ while True:
 6. Выполнить задачу
 7. Выход
 Выберите опцию (1-7): """)
-    option = int(input())
-    match option:
-        case 7:
+        option = int(input())
+        match option:
+            case 7:
+                break
+            case 6:
+                complete_task()
+            case 5:
+                sections_control_menu()
+            case 4:
+                delete_task()
+            case 3:
+                edit_task()
+            case 2:
+                show_tasks()
+            case 1:
+                add_new_task(sections)
+
+while True:
+    print("""=========================
+       LIFEKEEPER
+=========================
+Здравствуйте, пожалуйста выберите опцию:
+1.Открыть tmanager
+2.Создать tmanager
+3.Выйти""")
+    choice = input()
+    match choice:
+        case "1":
+            tmanager_path = input("Введите путь к tmanager: ")
+            tmanager.read_data_from_tmanager_file(tmanager_path)
+            main_menu()
+        case "2":
+            tmanager_path = input("Введите путь к директории, где вы хотите создать новый tmanager: ")
+            tmanager_name = input("Введите имя менеджера задач: ")
+            tmanager.create_tmanager_file(tmanager_path, tmanager_name)
+        case "3":
             break
-        case 6:
-            complete_task()
-        case 5:
-            sections_control()
-        case 4:
-            delete_task()
-        case 3:
-            edit_task()
-        case 2:
-            show_tasks()
-        case 1:
-            add_new_task(sections)
+        case _:
+            print("Please choose an option")
+print(tmanager_path)
