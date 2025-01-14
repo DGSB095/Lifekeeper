@@ -1,6 +1,6 @@
 import json
 import pathlib
-import sql3
+import sqlite3
 
 class Task:
     def __init__(self,id=0, completed=False,content="",section=0,due_date="",should_repeat="", delete_on_complete=True):
@@ -61,20 +61,30 @@ class TaskManager:
     def edit_section(self, section_id, new_section):
         self.sections[section_id] = new_section
 
-    def read_data_from_tmanager_file(self, path_to_tmanager):
-        with open(path_to_tmanager + "/.lifekeeper/tmanager.json", "r") as f:
-            data = json.load(f)
-            self.tasks = data["tasks"]
-            self.sections = data["sections"]
-            self.next_id = data["next_id"]
+    def read_data_from_tmanager_file(self, path_to_vault):
+        dotlifekeeper_path = path_to_vault + "/.lifekeeper"
+        tmanager_conn = sqlite3.connect(dotlifekeeper_path + "/tmanager.db")
+        cursor = tmanager_conn.cursor()
+        
+        
 
     def create_tmanager_file(self, path, tmanager_name):
         try:
             pathlib.Path(path + "/" + tmanager_name).mkdir(parents=True, exist_ok=False)
             pathlib.Path(path + "/" + tmanager_name + "/.lifekeeper").mkdir(parents=True, exist_ok=False)
-            with open(path + "/" + tmanager_name + "/.lifekeeper/tmanager.json", "w") as f:
-                json.dump({"tasks": [], "sections": [], "next_id": 0}, f)
-            self.read_data_from_tmanager_file(path + "/" + tmanager_name)
+            dotlifekeeper_path = path + "/" + tmanager_name + "/.lifekeeper"
+            tmanager_conn = sqlite3.connect(dotlifekeeper_path + "/tmanager.db")
+            cursor = tmanager_conn.cursor()
+            cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Sections (
+            section_name TEXT PRIMARY KEY)''')
+            cursor.execute('''CREATE IF NOT EXISTS Tasks (
+            task_name TEXT,
+            task_id INTEGER,
+            section_id INTEGER)''')
+            
+
+            
         except FileExistsError:
             return False
 
