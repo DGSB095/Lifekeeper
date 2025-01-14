@@ -3,7 +3,7 @@ import pathlib
 import sqlite3
 
 class Task:
-    def __init__(self,id=0, completed=False,content="",section=0,due_date="",should_repeat="", delete_on_complete=True):
+    def __init__(self,id=0, completed=False,content="",section=0,due_date="",should_repeat=False, delete_on_complete=True):
         self.id = id
         self.content = content
         self.section = section
@@ -78,10 +78,19 @@ class TaskManager:
             cursor.execute('''
             CREATE TABLE IF NOT EXISTS Sections (
             section_name TEXT PRIMARY KEY)''')
-            cursor.execute('''CREATE IF NOT EXISTS Tasks (
+            cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Tasks (
+            task_id INTEGER PRIMARY KEY,
+            completed BOOL,
             task_name TEXT,
-            task_id INTEGER,
-            section_id INTEGER)''')
+            task_content TEXT,
+            section_id INTEGER,
+            due_date TEXT,
+            should_repeat BOOL,
+            delete_on_complete BOOL
+            )''')
+
+
             
 
             

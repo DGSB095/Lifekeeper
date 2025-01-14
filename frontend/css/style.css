@@ -1,0 +1,101 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #1e1e2f;
+    color: white;
+}
+
+/* Header styles */
+header {
+    background-color: #161625;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Space out items */
+    align-items: center; /* Center items vertically */
+    max-width: 1200px; /* Restrict header width */
+    margin: 0 auto; /* Center the navbar horizontally */
+}
+
+/* Logo styles */
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+/* Navigation links */
+.nav-links {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    margin: 0 10px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ccc;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: goldenrod;
+}
+
+/* Actions: Sign-in button and icons */
+.nav-actions {
+    display: flex;
+    align-items: center;
+}
+
+.sign-in-btn {
+    background-color: goldenrod;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+}
+
+.sign-in-btn:hover {
+    background-color: #e0b052;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.icons span {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: #5a5a71;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.icons span:hover {
+    background-color: goldenrod;
+}
