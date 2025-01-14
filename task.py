@@ -1,5 +1,6 @@
 import json
 import pathlib
+import sql3
 
 class Task:
     def __init__(self,id=0, completed=False,content="",section=0,due_date="",should_repeat="", delete_on_complete=True):
