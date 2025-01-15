@@ -122,3 +122,8 @@ header {
     width: 60%; /* Adjust width to fit the button */
     height: auto; /* Maintain aspect ratio */
 }
+
+.settings_icon {
+    width: 60%; /* Adjust width to fit the button */
+    height: auto; /* Maintain aspect ratio */
+}
