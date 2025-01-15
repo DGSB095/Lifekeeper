@@ -48,14 +48,20 @@ header {
 }
 
 .nav-links a {
+    background-color: #1e1e2f;
+    color: goldenrod;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 8px 15px;
     text-decoration: none;
-    color: #ccc;
-    font-size: 14px;
-    transition: color 0.3s;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+    display: inline-block; /* Ensure it behaves like a button */
 }
 
 .nav-links a:hover {
-    color: goldenrod;
+    background-color: #e0b052;
+    color: #1e1e2f;
 }
 
 /* Actions: Sign-in button and icons */
@@ -67,19 +73,19 @@ header {
 .sign-in-btn {
     background-color: #1e1e2f;
     color: goldenrod;
-    border:5px;
-    border-color: goldenrod;
+    border: 1px solid goldenrod;
     border-radius: 5px;
     padding: 8px 15px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 14px;
-
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 18px;
+    text-decoration: none; /* Ensure it looks like a button */
+    display: inline-block; /* Ensure it behaves like a button */
 }
 
 .sign-in-btn:hover {
     background-color: #e0b052;
-    color:#1e1e2f;
+    color: #1e1e2f;
 }
 
 .icons {
@@ -88,17 +94,31 @@ header {
     margin-left: 15px;
 }
 
-.icons span {
-    display: inline-block;
+.icons a {
+    display: flex; /* Change from inline-block to flex */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
     width: 40px;
     height: 40px;
     background-color: #5a5a71;
     border-radius: 50%;
+    border-color: transparent;
     margin: 0 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    text-decoration: none; /* Ensure it looks like a button */
 }
 
-.icons span:hover {
+.icons a:hover {
     background-color: goldenrod;
+}
+
+.discord_icon {
+    width: 80%; /* Adjust width to fit the button */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.x_icon {
+    width: 60%; /* Adjust width to fit the button */
+    height: auto; /* Maintain aspect ratio */
 }
