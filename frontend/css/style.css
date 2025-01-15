@@ -65,18 +65,21 @@ header {
 }
 
 .sign-in-btn {
-    background-color: goldenrod;
-    color: white;
-    border: none;
+    background-color: #1e1e2f;
+    color: goldenrod;
+    border:5px;
+    border-color: goldenrod;
     border-radius: 5px;
     padding: 8px 15px;
     cursor: pointer;
     transition: background-color 0.3s;
     font-size: 14px;
+
 }
 
 .sign-in-btn:hover {
     background-color: #e0b052;
+    color:#1e1e2f;
 }
 
 .icons {
