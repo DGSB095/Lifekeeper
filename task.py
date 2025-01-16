@@ -23,6 +23,7 @@ class TaskManager:
 
     def add_task(self,completed,content,section,due_date,should_repeat,delete_on_complete):
         self.tasks.append(Task(self.next_id,False,content,section,due_date,should_repeat,delete_on_complete))
+        self.next_id += 1
 
     def remove_task(self, id):
         for task in self.tasks:
@@ -65,16 +66,37 @@ class TaskManager:
         dotlifekeeper_path = path_to_vault + "/.lifekeeper"
         tmanager_conn = sqlite3.connect(dotlifekeeper_path + "/tmanager.db")
         cursor = tmanager_conn.cursor()
+
+        cursor.execute("SELECT section_name FROM Sections")
+        self.sections = [row[0] for row in cursor.fetchall()]
+
+        cursor.execute(
+            "SELECT task_id, completed, task_name, task_content, section_id, due_date, should_repeat, delete_on_complete FROM Tasks")
+        self.tasks = []
+        for row in cursor.fetchall():
+            task = Task(
+                id=row[0],
+                completed=row[1],
+                content=row[3],
+                section=row[4],
+                due_date=row[5],
+                should_repeat=row[6],
+                delete_on_complete=row[7]
+            )
+            self.tasks.append(task)
+
+        self.next_id = max(task.id for task in self.tasks) + 1 if self.tasks else 0
+
+        tmanager_conn.close()
         
         
 
     def create_tmanager_file(self, path, tmanager_name):
-        try:
             pathlib.Path(path + "/" + tmanager_name).mkdir(parents=True, exist_ok=False)
             pathlib.Path(path + "/" + tmanager_name + "/.lifekeeper").mkdir(parents=True, exist_ok=False)
             dotlifekeeper_path = path + "/" + tmanager_name + "/.lifekeeper"
-            tmanager_conn = sqlite3.connect(dotlifekeeper_path + "/tmanager.db")
-            cursor = tmanager_conn.cursor()
+            tmanager_con = sqlite3.connect(dotlifekeeper_path + "/tmanager.db")
+            cursor = tmanager_con.cursor()
             cursor.execute('''
             CREATE TABLE IF NOT EXISTS Sections (
             section_name TEXT PRIMARY KEY)''')
@@ -89,15 +111,24 @@ class TaskManager:
             should_repeat BOOL,
             delete_on_complete BOOL
             )''')
-
-
-            
-
-            
-        except FileExistsError:
-            return False
+            tmanager_con.close()
 
     def write_data_to_tmanager_file(self, path_to_tmanager):
-        tasks_dict = [task.__dict__ for task in self.tasks]
-        with open(path_to_tmanager + "/.lifekeeper/tmanager.json", "w") as f:
-            json.dump({"tasks": tasks_dict, "sections": self.sections, "next_id": self.next_id}, f)
+        dotlifekeeper_path = path_to_tmanager + "/.lifekeeper"
+        tmanager_conn = sqlite3.connect(dotlifekeeper_path + "/tmanager.db")
+        cursor = tmanager_conn.cursor()
+
+        cursor.execute("DELETE FROM Sections")
+        cursor.execute("DELETE FROM Tasks")
+
+        for section in self.sections:
+            cursor.execute("INSERT INTO Sections (section_name) VALUES (?)", (section,))
+
+        for task in self.tasks:
+            cursor.execute('''INSERT INTO Tasks (task_id, completed, task_name, task_content, section_id, due_date, should_repeat, delete_on_complete)
+                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+                           (task.id, task.completed, task.content, task.content, task.section, task.due_date,
+                            task.should_repeat, task.delete_on_complete))
+
+        tmanager_conn.commit()
+        tmanager_conn.close()

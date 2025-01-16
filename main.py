@@ -1,23 +1,24 @@
 from task import *
 
-sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
+#sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
 tmanager_path = ""
-tmanager = TaskManager([], sections, 0)
+tmanager = TaskManager([], [], 0)
 
-def add_new_task(sections):
+def add_new_task():
     content = input("Введите описание задачи: ")
     print("Выберите раздел: ")
     for index, section in enumerate(tmanager.sections, 1):
         print(f"{index}. {section}")
     section = int(input("Введите номер раздела (или пустым, если нет): "))
     due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
-    should_repeat = input("Повторять задачу? (нет/каждые 3 дня): ")
+    should_repeat = input("Повторять задачу? (число/ничего): ")
     delete_on_complete = input("Удалить задачу после завершения? (Y/N): ")
     if delete_on_complete.lower() == "y":
         tmanager.add_task(False, content, section, due_date, should_repeat,True)
     else:
         tmanager.add_task(False, content, section, due_date, should_repeat,False)
     tmanager.write_data_to_tmanager_file(tmanager_path)
+
 
 
 def show_tasks():
@@ -56,10 +57,10 @@ def edit_task():
     content = input("Введите описание задачи: ")
     print("Выберите раздел: ")
     while True:
-        for index, section in enumerate(sections, 1):
+        for index, section in enumerate(tmanager.sections, 1):
             print(f"{index}. {section}")
         section = int(input("Введите номер раздела (или пустым, если нет): "))
-        if len(sections) < section:
+        if len(tmanager.sections) < section:
             print("Введите корректный номер раздела.")
         else:
             break
@@ -92,10 +93,10 @@ def sections_control_menu():
                 for index, section in enumerate(tmanager.sections, 1):
                     print(f"{index}. {section}")
             case 3:
-                for index, section in enumerate(sections, 1):
+                for index, section in enumerate(tmanager.sections, 1):
                     print(f"{index}. {section}")
                 section_id = int(input("Введите номер раздела для удаления: "))
-                if section_id > len(sections) or section_id < 1:
+                if section_id > len(tmanager.sections) or section_id < 1:
                     print("Введите корректный номер раздела.")
                 else:
                     tmanager.remove_section(section_id - 1)
@@ -134,7 +135,8 @@ def main_menu():
             case 2:
                 show_tasks()
             case 1:
-                add_new_task(sections)
+                add_new_task()
+        tmanager.write_data_to_tmanager_file(tmanager_path)
 
 while True:
     print("""=========================
@@ -154,8 +156,9 @@ while True:
             tmanager_path = input("Введите путь к директории, где вы хотите создать новый tmanager: ")
             tmanager_name = input("Введите имя менеджера задач: ")
             tmanager.create_tmanager_file(tmanager_path, tmanager_name)
+            tmanager_path = tmanager_path + "/" + tmanager_name
+            main_menu()
         case "3":
             break
         case _:
             print("Please choose an option")
-print(tmanager_path)
